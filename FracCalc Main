@@ -1,0 +1,304 @@
+//FracCalc
+//Nicky Sandoz
+//AP Computer Science
+//10/25
+
+import java.util.*;
+
+public class FracCalcMultiply {
+	static int integer1 = 0;
+	static int integer2 = 0;
+	static int numerator1 = 0;
+	static int numerator2 = 0;
+	static int denominator1 = 0;
+	static int denominator2 = 0;
+
+	static boolean integ1 = false;
+	static boolean frac1 = false;
+
+	static boolean integ2 = false;
+	static boolean frac2 = false;
+
+	static boolean multi = false;
+	static boolean divis = false;
+	static boolean add = false;
+
+	static boolean neg = false;
+
+	public static void main(String[] args) {
+
+		Scanner keyboard = new Scanner(System.in); // starts a scanner
+
+		System.out.println("Please enter a fractional expression: ");// prompts
+																		// user
+
+		boolean loop = true; // to loop until quit is entered
+		while (loop) {// an expression
+			integ1 = false;
+			frac1 = false;
+
+			integ2 = false;
+			frac2 = false;
+
+			multi = false;
+
+			String input = keyboard.nextLine();// gets user input
+
+			if (!input.equals("quit")) {
+				int space = input.indexOf(" "); // finds space and parses the
+												// input
+				String first = input.substring(0, space);// into two parts
+				String second = input.substring(space + 3);// one before
+															// operator
+				String op = input.substring(space + 1, space + 2);// and one
+																	// after
+				opdeter(op);// here it determines the operator
+
+				/////////////////////////////////////////////////////////////
+
+				if (first.indexOf("_") != -1) { // here it finds the '_'
+					int int1 = first.indexOf("_");// so it can find the first
+													// integer
+					String firstint = input.substring(0, int1);
+					integer1 = Integer.parseInt(firstint);
+					// System.out.println("First int = " + firstint);
+					integ1 = true;
+				} else {
+					if (first.indexOf("/") == -1) {// if there is no '_' and no
+													// '/'
+						integer1 = Integer.parseInt(first);
+						// System.out.println("First int = " + first);// then it
+						// is
+						// just a
+					} // whole number
+
+				}
+
+				if (first.indexOf("/") != -1) {// this part parses the numerator
+												// and denom.
+					int under = first.indexOf("_") + 1;// it uses the '_' and
+														// '/'
+					int slash = first.indexOf("/");// to find the fraction
+
+					String numerator = first.substring(under, slash);
+					numerator1 = Integer.parseInt(numerator);
+					// System.out.println("First Numerator is " + numerator);//
+					// finds
+					// and
+					// prints
+					// it
+
+					String denominator = first.substring(slash + 1);
+					denominator1 = Integer.parseInt(denominator);
+					// System.out.println("First Denominator is " +
+					// denominator);
+					frac1 = true;
+
+				}
+
+				if (second.indexOf("_") != -1) {// now basically the same exact
+												// thing for the
+					int int1 = second.indexOf("_");// other side of the equation
+					String secondint = second.substring(0, int1);
+					// System.out.println(secondint);
+					integer2 = Integer.parseInt(secondint);
+					// System.out.println("Second int = " + secondint);
+					integ2 = true;
+				} else {
+					if (second.indexOf("/") == -1) {
+						integer2 = Integer.parseInt(second);
+						// System.out.println("Second int = " + second);
+					}
+				}
+
+				if (second.indexOf("/") != -1) {
+					int under = second.indexOf("_");
+					int slash = second.indexOf("/");
+
+					String numerator = second.substring(under + 1, slash);
+					numerator2 = Integer.parseInt(numerator);
+					// System.out.println("Second Numerator is " + numerator);
+
+					String denominator = second.substring(slash + 1);
+					denominator2 = Integer.parseInt(denominator);
+					// System.out.println("Second Denominator is " +
+					// denominator2);
+					frac2 = true;
+
+				}
+
+				if (frac1 == true || integ1 == true) {
+					int stuff = integer1 * denominator1;
+					if (stuff < 0) {
+						int newnum = stuff - numerator1;
+						numerator1 = newnum;
+						integer1 = 0;
+					} else {
+						int newnum = stuff + numerator1;
+
+						numerator1 = newnum;
+						integer1 = 0;
+					}
+				}
+
+				if (frac2 == true || integ2 == true) { // determines whether to
+														// make an improper frac
+					int stuff = integer2 * denominator2;
+					int newnum = stuff + numerator2;
+					numerator2 = newnum;
+					integer2 = 0;
+
+				}
+
+				if (frac1 == false && integ1 == false) {// doesnt print '6/1'
+					numerator1 = integer1;
+					denominator1 = 1;
+				}
+
+				if (frac2 == false && integ2 == false) { // same for second half
+
+					numerator2 = integer2;
+					denominator2 = 1;
+				}
+
+				if (multi == true) {
+					multiplication(integer1, numerator1, denominator1, integer2, numerator2, denominator2);
+				}
+				if (add == true) {
+					addition(integer1, numerator1, denominator1, integer2, numerator2, denominator2);
+				}
+				if (divis == true) {
+					division(integer1, numerator1, denominator1, integer2, numerator2, denominator2);
+				}
+
+				System.out.println();
+				loop = true;// if loop is true...
+
+				System.out.println("\nEnter an expression:"); // a little
+																// fenceposting
+																// here
+																// this is where
+
+			} // it repeats
+			else {
+
+				loop = false;// if it's false, it quits
+				System.out.println("Thank you for using Nicky's Calculator!");
+			}
+		}
+
+		keyboard.close();
+	}
+
+	public static String opdeter(String x) {// this method determines the
+											// operator
+		if (x.equals("+")) {
+			x = "addition";
+			add = true;
+		}
+		if (x.equals("-")) {
+			x = "subtraction";
+		}
+		if (x.equals("*")) {
+			x = "multiplication";
+			multi = true;
+		}
+		if (x.equals("/")) {
+			x = "division";
+			divis = true;
+		}
+		// System.out.println("Operation is " + x);// and prints it
+		return x;
+	}
+
+	public static int multiplication(int integer1, int numerator1, int denominator1, int integer2, int numerator2,
+			int denominator2) {
+
+		int answer = 0;
+		int newnum = numerator1 * numerator2; // makes the new numerator and
+												// denominator
+		int newdeno = denominator1 * denominator2;
+
+		neg = false;
+		if (newnum < 0) {
+			newnum = newnum * -1; // if its negative, it makes it negative after
+									// it multiplies
+			neg = true;
+		}
+
+		int cons = newnum; // creates a constant
+		newnum = gcf(newnum, newdeno); // simplifies
+		newdeno = gcf(newdeno, cons); // the fractions
+		if (neg == true) {
+			newnum = newnum * -1; // makes it negative again
+		}
+
+		if (newdeno != 0) {
+			if (newdeno == 1) {
+				System.out.println(newnum); // if denominator is 1, prints
+											// numerator only
+			}
+
+			else {
+
+				if (Math.abs(newnum) > Math.abs(newdeno) && newdeno != 1 && newnum != 0 && newdeno != 0) {
+
+					int stuff = newnum / newdeno; // makes a mixed number
+					int stuffmod = newnum % newdeno;
+					if (stuffmod == 0) {
+						System.out.println(stuff);
+					} else {
+						System.out.println(stuff + "_" + Math.abs(stuffmod) + "/" + (newdeno));
+					}
+
+				} else {
+					if (newdeno != 1 && newnum != 0 && newdeno != 0) { // prints
+																		// it in
+																		// fraction
+																		// form
+
+						System.out.println(newnum + "/" + newdeno);
+					} else {
+						System.out.println(newnum);
+					}
+				}
+			}
+		} else {
+			System.out.println(0);
+		}
+		return answer;
+	}
+
+	public static void addition(int integer1, int numerator1, int denominator1, int integer2, int numerator2,
+			int denominator2) {
+		System.out.println("Adding");
+	}
+
+	public static void division(int integer1, int numerator1, int denominator1, int integer2, int numerator2,
+			int denominator2) {
+
+		int answer = numerator2;
+		numerator2 = denominator2;
+		denominator2 = answer;
+
+		multiplication(integer1, numerator1, denominator1, integer2, numerator2, denominator2);
+	}
+
+	public static int gcf(int newnum, int newdeno) { // simplifies the fraction
+		if (newnum != 0) {
+			for (int i = 2; i < newnum && i < newdeno; i++) {// goes through
+																// numbers to
+																// see if
+																// divisible
+				while (newnum % i == 0 && newdeno % i == 0) {
+					newnum = newnum / i;
+					newdeno = newdeno / i;
+				}
+			}
+			if (newnum == newdeno) {
+				return 1;
+			}
+		}
+		return newnum;
+	}
+}

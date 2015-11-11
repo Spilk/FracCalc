@@ -22,6 +22,7 @@ public class FracCalcMultiply {
 	static boolean multi = false;
 	static boolean divis = false;
 	static boolean add = false;
+	static boolean sub = false;
 
 	static boolean neg = false;
 
@@ -165,10 +166,13 @@ public class FracCalcMultiply {
 					multiplication(integer1, numerator1, denominator1, integer2, numerator2, denominator2);
 				}
 				if (add == true) {
-					addition(integer1, numerator1, denominator1, integer2, numerator2, denominator2);
+					addsub(integer1, numerator1, denominator1, integer2, numerator2, denominator2);
 				}
 				if (divis == true) {
 					division(integer1, numerator1, denominator1, integer2, numerator2, denominator2);
+				}
+				if (sub == true){
+					addsub(integer1, numerator1, denominator1, integer2, numerator2, denominator2);
 				}
 
 				System.out.println();
@@ -198,6 +202,7 @@ public class FracCalcMultiply {
 		}
 		if (x.equals("-")) {
 			x = "subtraction";
+			sub = true;
 		}
 		if (x.equals("*")) {
 			x = "multiplication";
@@ -269,11 +274,78 @@ public class FracCalcMultiply {
 		return answer;
 	}
 
-	public static void addition(int integer1, int numerator1, int denominator1, int integer2, int numerator2,
+	public static void addsub(int integer1, int numerator1, int denominator1, int integer2, int numerator2,
 			int denominator2) {
-		System.out.println("Adding");
-	}
+			int constdeno1 = denominator1;
+			int constdeno2 = denominator2;
+			 while(denominator1 != denominator2) {
+				    if (denominator1 < denominator2){
+				    	denominator1 = denominator1 + constdeno1;
+				    }
+				    else{
+				    	denominator2 = denominator2 + constdeno2;
+				    }
+			 }
+			 int nummult1 = denominator1 / constdeno1;
+			 int nummult2 = denominator2 / constdeno2;
+			int newnum1 = numerator1 * nummult1;
+			int newnum2 = numerator2 * nummult2;
+			int newnum = 0;
+			if (add == true){
+			newnum = newnum1 + newnum2;
+			}
+			else{
+				if (sub == true){
+				if (newnum1 > newnum2){
+			newnum = newnum1 - newnum2;
+				}
+				if (newnum2 > newnum1){
+					newnum = newnum2 - newnum1;
+					neg = true;
+				}
+			}
+			}
 
+			int newdeno = denominator1;
+			
+			gcf(newnum, newdeno);
+			if (neg == true){
+				newnum = newnum * -1;
+			}
+			if (newdeno != 0) {
+				if (newdeno == 1) {
+					System.out.println(newnum); // if denominator is 1, prints
+												// numerator only
+				}
+
+				else {
+
+					if (Math.abs(newnum) > Math.abs(newdeno) && newdeno != 1 && newnum != 0 && newdeno != 0) {
+
+						int stuff = newnum / newdeno; // makes a mixed number
+						int stuffmod = newnum % newdeno;
+						if (stuffmod == 0) {
+							System.out.println(stuff);
+						} else {
+							System.out.println(stuff + "_" + Math.abs(stuffmod) + "/" + (newdeno));
+						}
+
+					} else {
+						if (newdeno != 1 && newnum != 0 && newdeno != 0) { // prints
+																			// it in
+																			// fraction
+																			// form
+
+							System.out.println(newnum + "/" + newdeno);
+						} else {
+							System.out.println(newnum);
+						}
+					}
+				}
+			} else {
+				System.out.println(0);
+			}
+	}
 	public static void division(int integer1, int numerator1, int denominator1, int integer2, int numerator2,
 			int denominator2) {
 
